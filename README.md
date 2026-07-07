@@ -6,7 +6,7 @@
 </p>
 
 <p align="center">
-  <strong><code>Practice Like a Real Hacker</code></strong>
+  <strong><code>像真正的黑客一样练习</code></strong>
 </p>
 
 <p align="center">
@@ -21,24 +21,19 @@
 
 ---
 
-<!-- Language tabs -->
 <div align="center">
   <table>
     <tr>
-      <td><a href="#中文"><kbd>🇨🇳 中文</kbd></a></td>
-      <td><a href="#english"><kbd>🇺🇸 English</kbd></a></td>
-      <td><a href="#日本語"><kbd>🇯🇵 日本語</kbd></a></td>
+      <td><kbd>🇨🇳 中文</kbd></td>
+      <td><a href="README_EN.md"><kbd>🇺🇸 English</kbd></a></td>
+      <td><a href="README_JA.md"><kbd>🇯🇵 日本語</kbd></a></td>
     </tr>
   </table>
 </div>
 
 ---
 
-<!-- ==================== 中文 ==================== -->
-
-<a name="中文"></a>
-
-# 🇨🇳 CyberLab
+# CyberLab
 
 > **像真正的黑客一样练习**
 
@@ -48,24 +43,7 @@ CyberLab 是一个开源的在线网络安全靶场平台，为安全爱好者�
 
 ---
 
-## 📸 预览
-
-<table>
-  <tr>
-    <td align="center"><b>首页演示</b></td>
-    <td align="center"><b>挑战详情</b></td>
-    <td align="center"><b>排行榜</b></td>
-  </tr>
-  <tr>
-    <td><img src="https://placehold.co/600x400/0a0a0a/00ff41?text=CyberLab+Landing&font=montserrat" alt="Landing" width="100%"/></td>
-    <td><img src="https://placehold.co/600x400/0a0a0a/00ff41?text=Challenge+Detail&font=montserrat" alt="Challenge" width="100%"/></td>
-    <td><img src="https://placehold.co/600x400/0a0a0a/00ff41?text=Leaderboard&font=montserrat" alt="Ranking" width="100%"/></td>
-  </tr>
-</table>
-
----
-
-## ✨ 核心特性
+## 核心特性
 
 ### 🎯 动态靶场环境
 每个挑战创建**独立的 Docker 容器**，分配随机端口，返回专属访问地址。用户之间完全隔离，互不影响。
@@ -87,7 +65,7 @@ CyberLab 是一个开源的在线网络安全靶场平台，为安全爱好者�
 
 ---
 
-## 🏗️ 技术架构
+## 技术架构
 
 ```
 ┌─────────────────────────────────────────────┐
@@ -117,7 +95,7 @@ CyberLab 是一个开源的在线网络安全靶场平台，为安全爱好者�
 | 层级 | 技术 | 用途 |
 |------|------|------|
 | **前端** | Next.js 15 + React 19 + TypeScript + Tailwind CSS + shadcn/ui | SPA + SSR，响应式 UI |
-| **状态管理** | Zustand | 轻量全局状态（用户/认证/WebSocket） |
+| **状态管理** | Zustand | 轻量全局状态 |
 | **动画** | Framer Motion | 页面过渡、卡片动画 |
 | **后端** | Go + Gin + GORM + JWT + Zap | RESTful API，高性能 |
 | **数据库** | MySQL 8.0 (utf8mb4) + Redis 7 | 业务存储 + 缓存加速 |
@@ -127,7 +105,7 @@ CyberLab 是一个开源的在线网络安全靶场平台，为安全爱好者�
 
 ---
 
-## 🚀 快速开始
+## 快速开始
 
 ### 前置依赖
 
@@ -142,15 +120,13 @@ CyberLab 是一个开源的在线网络安全靶场平台，为安全爱好者�
 ```bash
 cd backend
 export GOPROXY=https://proxy.golang.org,direct  # Linux/macOS
-# 或 Windows:
+# Windows:
 set GOPROXY=https://proxy.golang.org,direct
 
 # 配置数据库（编辑 config/config.yaml）
-# 然后启动：
 go run ./cmd/server
 ```
 
-启动后访问：
 - API: `http://localhost:8080`
 - Swagger 文档: `http://localhost:8080/swagger/index.html`
 - WebSocket: `ws://localhost:8080/ws`
@@ -175,9 +151,9 @@ docker-compose up -d
 
 ---
 
-## 📖 API 参考
+## API 参考
 
-**基础路径**: `/api/v1`
+基础路径: `/api/v1`
 
 ### 公开接口
 
@@ -211,7 +187,7 @@ docker-compose up -d
 ws://host/ws?userId={id}
 ```
 
-**事件推送**：
+事件推送：
 - `container_created` — 容器创建成功
 - `container_destroyed` — 容器已销毁
 - `container_error` — 容器异常
@@ -220,34 +196,34 @@ ws://host/ws?userId={id}
 
 ---
 
-## 🗂️ 项目结构
+## 项目结构
 
 ```
 CyberLab/
 ├── backend/                    # Go 后端服务
 │   ├── cmd/server/main.go      # 入口
-│   ├── internal/
+│   ├── internal/               # 业务逻辑
 │   │   ├── config/             # 配置加载
 │   │   ├── handlers/           # HTTP 处理器
 │   │   ├── middleware/         # JWT 认证
-│   │   ├── models/            # 数据模型（9 表）
-│   │   ├── repository/        # 数据访问层
-│   │   ├── services/          # 业务逻辑
-│   │   ├── scheduler/         # 容器回收
-│   │   └── router/            # 路由注册
-│   └── pkg/
-│       ├── docker/            # Docker CLI 封装
-│       ├── ws/                # WebSocket Hub
-│       └── utils/             # 工具函数
+│   │   ├── models/             # 数据模型（9 表）
+│   │   ├── repository/         # 数据访问层
+│   │   ├── services/           # 业务逻辑
+│   │   ├── scheduler/          # 容器回收
+│   │   └── router/             # 路由注册
+│   └── pkg/                    # 工具包
+│       ├── docker/             # Docker CLI 封装
+│       ├── ws/                 # WebSocket Hub
+│       └── utils/              # 工具函数
 │
 ├── frontend/                   # Next.js 前端
 │   └── src/
-│       ├── app/               # 页面路由
-│       ├── components/        # UI 组件
-│       ├── locales/           # 多语言（中/英/日）
-│       ├── providers/         # 主题 + 语言 Provider
-│       ├── services/          # API 客户端
-│       └── store/             # Zustand 状态管理
+│       ├── app/                # 页面路由
+│       ├── components/         # UI 组件
+│       ├── locales/            # 多语言（中/英/日）
+│       ├── providers/          # 主题 + 语言 Provider
+│       ├── services/           # API 客户端
+│       └── store/              # Zustand 状态管理
 │
 ├── deploy/                     # 部署配置
 │   ├── docker-compose.yml
@@ -258,150 +234,6 @@ CyberLab/
 
 ---
 
-## 📄 License
+## License
 
 **MIT** — 可自由使用、修改、商用。
-
----
-
-<!-- ==================== ENGLISH ==================== -->
-
-<a name="english"></a>
-
-# 🇺🇸 CyberLab
-
-> **Practice Like a Real Hacker**
-
-CyberLab is an open-source cybersecurity training platform that provides **isolated, dynamic, real-vulnerability reproduction environments** for security enthusiasts and penetration testing learners. Each challenge spawns a dedicated Docker container just for you — explore and exploit in a realistic, risk-free environment.
-
-Unlike traditional CTF platforms that connect all users to the same site, CyberLab creates **per-user exclusive environments** ensuring full isolation, data separation, and automatic resource reclamation.
-
----
-
-## ✨ Key Features
-
-### 🎯 Dynamic Lab Environments
-Every challenge creates an **isolated Docker container** with a randomly assigned port and unique access URL. Users are completely isolated from each other.
-
-### 🔓 Real-World Vulnerabilities
-Covers mainstream web security vulnerabilities: **SQL Injection, XSS, RCE, SSRF, File Upload Bypass, JWT Security Issues**, and more. Built on real CVEs.
-
-### 🤖 AI-Powered Assistance
-Stuck on a challenge? The built-in AI assistant (powered by OpenAI) provides **contextual hints** to guide your thinking without giving away the answer. Also supports **source code upload for AI security audit**.
-
-### 🏆 CTF Scoring System
-Capture flags, earn points, and climb the leaderboard. Supports **global, weekly, and monthly rankings** with Redis-powered real-time updates.
-
-### ♻️ Auto Resource Reclamation
-A background worker scans for expired containers every minute — **auto-destroy, release ports, free disk space**. Default 30-minute timeout, configurable per challenge.
-
-### 🌐 i18n + Theme Switching
-Built-in **Chinese, English, and Japanese** language support with one-click switching. **Dark/Light/System** theme modes adapt to any environment.
-
----
-
-## 🚀 Quick Start
-
-### Prerequisites
-
-- Go 1.23+
-- MySQL 8.0+
-- Redis 7+
-- Docker (optional, for dynamic challenges)
-- Node.js 20+
-
-### Backend
-
-```bash
-cd backend
-export GOPROXY=https://proxy.golang.org,direct
-go run ./cmd/server
-```
-
-API: `http://localhost:8080` · Swagger: `http://localhost:8080/swagger/index.html`
-
-### Frontend
-
-```bash
-cd frontend
-npm install
-npm run dev
-```
-
-Visit: `http://localhost:3000`
-
-### Docker Compose
-
-```bash
-cd deploy
-docker-compose up -d
-```
-
----
-
-## 📄 License
-
-**MIT** — Free to use, modify, and distribute.
-
----
-
-<!-- ==================== 日本語 ==================== -->
-
-<a name="日本語"></a>
-
-# 🇯🇵 CyberLab
-
-> **本物のハッカーのように練習しよう**
-
-CyberLab は、セキュリティ愛好家やペネトレーションテスト学習者のためのオープンソースのサイバーセキュリティトレーニングプラットフォームです。**分離された動的な脆弱性再現環境**を提供し、各チャレンジはあなただけのために専用の Docker コンテナを起動します。
-
-従来の CTF プラットフォームとは異なり、CyberLab は**ユーザーごとに専用環境**を作成するため、相互干渉がなく、データは完全に分離され、リソースは自動的に解放されます。
-
----
-
-## ✨ 主な機能
-
-### 🎯 動的ラボ環境
-各チャレンジは**独立した Docker コンテナ**を作成し、ランダムなポートと専用 URL を割り当てます。ユーザー間の干渉は一切ありません。
-
-### 🔓 実際の脆弱性
-**SQL インジェクション、XSS、RCE、SSRF、ファイルアップロードバイパス、JWT セキュリティ問題**など、実際の CVE に基づいた脆弱性を練習できます。
-
-### 🤖 AI アシスト
-チャレンジで行き詰まりましたか？ビルトイン AI アシスタント（OpenAI 搭載）が**文脈に応じたヒント**を提供し、答えを直接教えずに考え方を導きます。ソースコードをアップロードして**AI セキュリティ監査**を受けることも可能です。
-
-### ♻️ 自動リソース回収
-バックグラウンドワーカーが毎分期限切れコンテナをスキャンし、**自動破棄、ポート解放、ディスク解放**を実施。デフォルトのタイムアウトは 30 分、チャレンジごとに設定可能です。
-
----
-
-## 🚀 クイックスタート
-
-### バックエンド
-
-```bash
-cd backend
-export GOPROXY=https://proxy.golang.org,direct
-go run ./cmd/server
-```
-
-### フロントエンド
-
-```bash
-cd frontend
-npm install
-npm run dev
-```
-
-### Docker Compose
-
-```bash
-cd deploy
-docker-compose up -d
-```
-
----
-
-## 📄 ライセンス
-
-**MIT** — 自由に使用、修正、配布できます。
