@@ -138,15 +138,15 @@ CyberLab 是一个开源的在线网络安全靶场平台，为安全爱好者�
 
 | 平台 | 文件 | 大小 |
 |------|------|------|
-| 🪟 Windows | [cyberlab-v1.0.0-windows-amd64.zip](https://github.com/Bronsan/CyberLab/releases/latest) | ~9.6 MB |
-| 🐧 Linux | [cyberlab-v1.0.0-linux-amd64.tar.gz](https://github.com/Bronsan/CyberLab/releases/latest) | ~9.3 MB |
-| 🍎 macOS Intel | [cyberlab-v1.0.0-darwin-amd64.tar.gz](https://github.com/Bronsan/CyberLab/releases/latest) | ~9.5 MB |
-| 🍎 macOS M1/M2 | [cyberlab-v1.0.0-darwin-arm64.tar.gz](https://github.com/Bronsan/CyberLab/releases/latest) | ~8.7 MB |
+| 🪟 Windows | [cyberlab-v1.1.0-windows-amd64.zip](https://github.com/Bronsan/CyberLab/releases/latest) | ~9.6 MB |
+| 🐧 Linux | [cyberlab-v1.1.0-linux-amd64.tar.gz](https://github.com/Bronsan/CyberLab/releases/latest) | ~9.3 MB |
+| 🍎 macOS Intel | [cyberlab-v1.1.0-darwin-amd64.tar.gz](https://github.com/Bronsan/CyberLab/releases/latest) | ~9.5 MB |
+| 🍎 macOS M1/M2 | [cyberlab-v1.1.0-darwin-arm64.tar.gz](https://github.com/Bronsan/CyberLab/releases/latest) | ~8.7 MB |
 | 📱 Android / iOS | PWA — 浏览器打开 → 添加到主屏幕 | 免安装 |
 
 ```bash
 # Linux/macOS 快速启动
-tar xzf cyberlab-v1.0.0-linux-amd64.tar.gz
+tar xzf cyberlab-v1.1.0-linux-amd64.tar.gz
 chmod +x run.sh && ./run.sh
 # 脚本自动生成 .env，编辑数据库密码后重新运行即可
 
