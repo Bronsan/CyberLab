@@ -2,7 +2,9 @@ package handlers
 
 import (
 	"strconv"
+	"time"
 
+	"github.com/cyberlab/backend/internal/models"
 	"github.com/cyberlab/backend/internal/services"
 	"github.com/cyberlab/backend/pkg/utils"
 	"github.com/gin-gonic/gin"
@@ -67,8 +69,8 @@ func (h *ContainerHandler) GetContainerStatus(c *gin.Context) {
 	}
 
 	runningTime := ""
-	if instance.Status == "RUNNING" && !instance.StartTime.IsZero() {
-		runningTime = instance.StartTime.Format("15m")
+	if instance.Status == models.InstanceStatusRunning && !instance.StartTime.IsZero() {
+		runningTime = time.Since(instance.StartTime).Round(time.Minute).String()
 	}
 
 	utils.Success(c, gin.H{

@@ -62,6 +62,15 @@ func main() {
 	if err != nil {
 		utils.Log.Fatal("Failed to connect to database", zap.Error(err))
 	}
+
+	// Apply connection pool settings
+	sqlDB, err := db.DB()
+	if err != nil {
+		utils.Log.Fatal("Failed to get SQL DB from GORM", zap.Error(err))
+	}
+	sqlDB.SetMaxIdleConns(cfg.Database.MaxIdleConns)
+	sqlDB.SetMaxOpenConns(cfg.Database.MaxOpenConns)
+
 	utils.Log.Info("Database connected", zap.String("host", cfg.Database.Host))
 
 	// Auto migrate
@@ -146,7 +155,7 @@ func main() {
 
 	// Initialize handlers
 	authHandler := handlers.NewAuthHandler(authService)
-	challengeHandler := handlers.NewChallengeHandler(challengeService)
+	challengeHandler := handlers.NewChallengeHandler(challengeService, cfg.Security.FlagHashSalt)
 	containerHandler := handlers.NewContainerHandler(containerService)
 	submissionHandler := handlers.NewSubmissionHandler(submissionRepo, challengeRepo, rankingService, logRepo, instanceRepo, cfg.Security.FlagHashSalt)
 	rankingHandler := handlers.NewRankingHandler(rankingService)

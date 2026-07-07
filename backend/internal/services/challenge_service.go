@@ -5,6 +5,7 @@ import (
 
 	"github.com/cyberlab/backend/internal/models"
 	"github.com/cyberlab/backend/internal/repository"
+	"github.com/cyberlab/backend/pkg/utils"
 )
 
 type ChallengeService struct {
@@ -57,6 +58,20 @@ func (s *ChallengeService) SearchChallenges(query string) ([]models.Challenge, e
 
 func (s *ChallengeService) CreateChallenge(challenge *models.Challenge) error {
 	return s.challengeRepo.Create(challenge)
+}
+
+// CreateChallengeWithFlag creates a challenge and hashes the flag after obtaining the ID.
+func (s *ChallengeService) CreateChallengeWithFlag(challenge *models.Challenge, rawFlag string, flagHashSalt string) error {
+	// Save without flag first to get ID
+	challenge.Flag = ""
+	if err := s.challengeRepo.Create(challenge); err != nil {
+		return err
+	}
+
+	// Hash flag with challenge ID as salt component
+	hashedFlag := utils.HashFlag(rawFlag, challenge.ID, flagHashSalt)
+	challenge.Flag = hashedFlag
+	return s.challengeRepo.Update(challenge)
 }
 
 func (s *ChallengeService) UpdateChallenge(challenge *models.Challenge) error {

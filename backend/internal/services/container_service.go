@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"math/rand"
+	"strings"
 	"sync"
 	"time"
 
@@ -69,6 +70,10 @@ type StartContainerResponse struct {
 }
 
 func (s *ContainerService) StartContainer(userID uint, challengeID uint) (*StartContainerResponse, error) {
+	if s.dockerMgr == nil {
+		return nil, errors.New("docker service is not available")
+	}
+
 	// Check if user already has a running instance for this challenge
 	existing, err := s.instanceRepo.FindByUserAndChallenge(userID, challengeID)
 	if err == nil && existing != nil {
@@ -345,38 +350,18 @@ func (s *ContainerService) validateAllowedImage(image string) error {
 	return fmt.Errorf("docker image %s is not in the allowed list", image)
 }
 
-// Simple glob match (supports "*" prefix/suffix matching)
+// Glob match supporting "prefix/*" and exact match patterns.
+// "cyberlab/*" matches "cyberlab/nginx", "cyberlab/nginx:v1", etc.
+// "library/*" matches "library/alpine", "library/alpine:latest", etc.
 func matchGlob(pattern, str string) (bool, error) {
-	// Exact match
 	if pattern == str {
 		return true, nil
 	}
-
-	// Wildcard: "prefix/*" matches "prefix/anything"
-	parts := patternSplit(pattern)
-	strParts := patternSplit(str)
-
-	if len(parts) == 2 && parts[0] == strParts[0] && parts[1] == "*" {
-		return true, nil
-	}
-	if len(parts) == 2 && parts[1] == "*" && parts[0] == strParts[0] {
-		return true, nil
-	}
-
-	return false, nil
-}
-
-func patternSplit(s string) []string {
-	var parts []string
-	current := ""
-	for i := 0; i < len(s); i++ {
-		if s[i] == '/' {
-			parts = append(parts, current)
-			current = ""
-		} else {
-			current += string(s[i])
+	if strings.HasSuffix(pattern, "/*") {
+		prefix := strings.TrimSuffix(pattern, "/*")
+		if strings.HasPrefix(str, prefix+"/") || str == prefix {
+			return true, nil
 		}
 	}
-	parts = append(parts, current)
-	return parts
+	return false, nil
 }

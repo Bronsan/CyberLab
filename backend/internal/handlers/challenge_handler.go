@@ -11,10 +11,11 @@ import (
 
 type ChallengeHandler struct {
 	challengeService *services.ChallengeService
+	flagHashSalt     string
 }
 
-func NewChallengeHandler(challengeService *services.ChallengeService) *ChallengeHandler {
-	return &ChallengeHandler{challengeService: challengeService}
+func NewChallengeHandler(challengeService *services.ChallengeService, flagHashSalt string) *ChallengeHandler {
+	return &ChallengeHandler{challengeService: challengeService, flagHashSalt: flagHashSalt}
 }
 
 // GetChallenges returns a paginated list of challenges
@@ -113,7 +114,9 @@ func (h *ChallengeHandler) CreateChallenge(c *gin.Context) {
 		return
 	}
 
-	if err := h.challengeService.CreateChallenge(&challenge); err != nil {
+	// Hash the flag with a random salt — store hash, not plaintext
+	rawFlag := challenge.Flag
+	if err := h.challengeService.CreateChallengeWithFlag(&challenge, rawFlag, h.flagHashSalt); err != nil {
 		utils.ServerError(c, "failed to create challenge")
 		return
 	}
