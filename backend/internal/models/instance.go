@@ -10,6 +10,7 @@ type ChallengeInstance struct {
 	ContainerName string    `gorm:"type:varchar(255)" json:"containerName"`
 	HostPort      int       `json:"hostPort"`
 	Status        string    `gorm:"type:varchar(20);index:idx_status;default:CREATED" json:"status"`
+	DynamicFlag   string    `gorm:"type:varchar(255)" json:"dynamicFlag,omitempty"`
 	StartTime     time.Time `json:"startTime"`
 	ExpireTime    time.Time `gorm:"index:idx_expire" json:"expireTime"`
 
