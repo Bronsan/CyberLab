@@ -3,7 +3,7 @@ backend/server
 backend/logs/
 backend/vendor/
 backend/.env
-backend/config/config.yaml        # 含密码密钥，不上传
+backend/config/config.yaml
 
 # Frontend
 frontend/node_modules/
