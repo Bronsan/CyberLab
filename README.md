@@ -295,17 +295,6 @@ CyberLab/
 
 ---
 
-## 部署到 GitHub Pages
-
-项目前端自动部署到 GitHub Pages：
-
-```
-https://bronsan.github.io/CyberLab/
-```
-
-每次推送 `master` 分支，GitHub Actions 自动构建静态站点并发布。
-
----
 
 ## License
 
