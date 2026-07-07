@@ -133,7 +133,30 @@ CyberLab は、セキュリティ愛好家やペネトレーションテスト�
 
 ---
 
-## クイックスタート
+## 📥 ダウンロード
+
+| プラットフォーム | ファイル | サイズ |
+|------------------|----------|--------|
+| 🪟 Windows | [cyberlab-v1.0.0-windows-amd64.zip](https://github.com/Bronsan/CyberLab/releases/latest) | ~9.6 MB |
+| 🐧 Linux | [cyberlab-v1.0.0-linux-amd64.tar.gz](https://github.com/Bronsan/CyberLab/releases/latest) | ~9.3 MB |
+| 🍎 macOS Intel | [cyberlab-v1.0.0-darwin-amd64.tar.gz](https://github.com/Bronsan/CyberLab/releases/latest) | ~9.5 MB |
+| 🍎 macOS M1/M2 | [cyberlab-v1.0.0-darwin-arm64.tar.gz](https://github.com/Bronsan/CyberLab/releases/latest) | ~8.7 MB |
+| 📱 Android / iOS | PWA — ブラウザで開く → ホーム画面に追加 | 無料 |
+
+```bash
+# Linux/macOS クイックスタート
+tar xzf cyberlab-v1.0.0-linux-amd64.tar.gz
+chmod +x run.sh && ./run.sh
+# 初回実行で .env が自動生成 — DBパスワードを編集して再実行
+
+# Windows: 解凍して run.bat をダブルクリック
+```
+
+> すべてのリリース → [GitHub Releases](https://github.com/Bronsan/CyberLab/releases)
+
+---
+
+## クイックスタート（ソースから）
 
 ### 前提条件
 

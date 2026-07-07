@@ -133,7 +133,30 @@ The frontend is deployed to GitHub Pages:
 
 ---
 
-## Quick Start
+## 📥 Download
+
+| Platform | File | Size |
+|----------|------|------|
+| 🪟 Windows | [cyberlab-v1.0.0-windows-amd64.zip](https://github.com/Bronsan/CyberLab/releases/latest) | ~9.6 MB |
+| 🐧 Linux | [cyberlab-v1.0.0-linux-amd64.tar.gz](https://github.com/Bronsan/CyberLab/releases/latest) | ~9.3 MB |
+| 🍎 macOS Intel | [cyberlab-v1.0.0-darwin-amd64.tar.gz](https://github.com/Bronsan/CyberLab/releases/latest) | ~9.5 MB |
+| 🍎 macOS M1/M2 | [cyberlab-v1.0.0-darwin-arm64.tar.gz](https://github.com/Bronsan/CyberLab/releases/latest) | ~8.7 MB |
+| 📱 Android / iOS | PWA — open in browser → Add to Home Screen | free |
+
+```bash
+# Linux/macOS quick start
+tar xzf cyberlab-v1.0.0-linux-amd64.tar.gz
+chmod +x run.sh && ./run.sh
+# Auto-generates .env on first run — edit DB password and re-run
+
+# Windows: extract and double-click run.bat
+```
+
+> All Releases → [GitHub Releases](https://github.com/Bronsan/CyberLab/releases)
+
+---
+
+## Quick Start (from source)
 
 ### Prerequisites
 
@@ -171,8 +194,6 @@ cd frontend
 npm install
 npm run dev
 ```
-
-Visit: `http://localhost:3000`
 
 ### Docker Compose
 
