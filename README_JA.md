@@ -17,6 +17,10 @@
   <img src="https://img.shields.io/badge/Docker-2496ED?logo=docker&logoColor=white" alt="Docker"/>
   <img src="https://img.shields.io/badge/TypeScript-3178C6?logo=typescript&logoColor=white" alt="TypeScript"/>
   <img src="https://img.shields.io/badge/license-MIT-green" alt="License"/>
+  <br/>
+  <img src="https://img.shields.io/badge/status-active-success" alt="Status"/>
+  <img src="https://img.shields.io/badge/security-audited-brightgreen" alt="Security"/>
+  <img src="https://img.shields.io/github/deployments/Bronsan/CyberLab/github-pages?label=pages" alt="Pages"/>
 </p>
 
 ---
@@ -29,6 +33,8 @@
       <td><kbd>🇯🇵 日本語</kbd></td>
     </tr>
   </table>
+  <br/>
+  <a href="https://bronsan.github.io/CyberLab/">🌐 ライブデモ</a>
 </div>
 
 ---
@@ -63,6 +69,28 @@ CyberLab は、セキュリティ愛好家やペネトレーションテスト�
 ### 🌐 i18n + テーマ切替
 **中国語、英語、日本語**に対応。ワンクリックで切替可能。**ダーク/ライト/システム**のテーマモードでどんな環境にも適応。
 
+### 🛡️ セキュリティ対策
+
+| 対策 | 説明 |
+|------|------|
+| **フラグのハッシュ化** | SHA-256 HMAC + チャレンジ別ソルト、DB漏洩時にフラグ保護 |
+| **レート制限** | ログイン 10回/分、登録 5回/分、ブルートフォース防止 |
+| **JWT 認証** | WebSocket と API は Bearer Token 必須 |
+| **Docker ホワイトリスト** | 許可されたイメージのみ実行可能、エスケープ防止 |
+| **CORS 制限** | ホワイトリストドメインのみ、ワイルドカード禁止 |
+| **セキュリティヘッダー** | X-Frame-Options / XSS-Protection / Content-Type-Options |
+| **パスワード・鍵はコードなし** | すべて環境変数から注入 |
+
+---
+
+## ライブデモ
+
+フロントエンドは GitHub Pages にデプロイされています：
+
+**https://bronsan.github.io/CyberLab/**
+
+> 注：フロントエンドは静的サイトです。完全な操作（ログイン、チャレンジ、コンテナ等）にはバックエンド API の起動が必要です。
+
 ---
 
 ## アーキテクチャ
@@ -94,14 +122,14 @@ CyberLab は、セキュリティ愛好家やペネトレーションテスト�
 
 | レイヤー | 技術 | 用途 |
 |----------|------|------|
-| **フロントエンド** | Next.js 15 + React 19 + TypeScript + Tailwind CSS + shadcn/ui | SPA + SSR、レスポンシブUI |
+| **フロントエンド** | Next.js 15 + React 19 + TypeScript + Tailwind CSS + shadcn/ui | SPA + SSR、i18n、テーマ切替 |
 | **状態管理** | Zustand | 軽量グローバル状態 |
 | **アニメーション** | Framer Motion | ページ遷移、カードアニメーション |
 | **バックエンド** | Go + Gin + GORM + JWT + Zap | RESTful API、高パフォーマンス |
 | **データベース** | MySQL 8.0 (utf8mb4) + Redis 7 | 永続化 + キャッシュ |
-| **コンテナ** | Docker CLI | 動的ラボ環境の管理 |
+| **コンテナ** | Docker CLI | 動的ラボ環境、ホワイトリスト |
 | **リアルタイム** | Gorilla WebSocket | コンテナ状態プッシュ、通知 |
-| **デプロイ** | Docker Compose + Nginx | ワンクリックデプロイ、リバースプロキシ |
+| **セキュリティ** | SHA-256 HMAC + レート制限 + CORS制限 | 漏洩防止、エスケープ防止 |
 
 ---
 
@@ -115,17 +143,22 @@ CyberLab は、セキュリティ愛好家やペネトレーションテスト�
 - Docker（動的チャレンジ用、オプション）
 - Node.js 20+
 
+### 必要な環境変数
+
+```bash
+export JWT_SECRET=your-random-secret-key
+export DB_PASSWORD=your-database-password
+export FLAG_HASH_SALT=your-random-64-char-salt
+# AI（オプション）：
+export AI_API_KEY=sk-your-openai-api-key
+```
+
 ### バックエンド
 
 ```bash
 cd backend
-export GOPROXY=https://proxy.golang.org,direct
 go run ./cmd/server
 ```
-
-- API: `http://localhost:8080`
-- Swagger: `http://localhost:8080/swagger/index.html`
-- WebSocket: `ws://localhost:8080/ws`
 
 ### フロントエンド
 
@@ -135,14 +168,24 @@ npm install
 npm run dev
 ```
 
-アクセス: `http://localhost:3000`
-
 ### Docker Compose
 
 ```bash
 cd deploy
 docker-compose up -d
 ```
+
+---
+
+## GitHub Pages デプロイ
+
+フロントエンドは GitHub Pages に自動デプロイされます：
+
+```
+https://bronsan.github.io/CyberLab/
+```
+
+`master` ブランチにプッシュするたびに、GitHub Actions が静的サイトをビルドして公開します。
 
 ---
 

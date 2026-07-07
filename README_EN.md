@@ -17,6 +17,10 @@
   <img src="https://img.shields.io/badge/Docker-2496ED?logo=docker&logoColor=white" alt="Docker"/>
   <img src="https://img.shields.io/badge/TypeScript-3178C6?logo=typescript&logoColor=white" alt="TypeScript"/>
   <img src="https://img.shields.io/badge/license-MIT-green" alt="License"/>
+  <br/>
+  <img src="https://img.shields.io/badge/status-active-success" alt="Status"/>
+  <img src="https://img.shields.io/badge/security-audited-brightgreen" alt="Security"/>
+  <img src="https://img.shields.io/github/deployments/Bronsan/CyberLab/github-pages?label=pages" alt="Pages"/>
 </p>
 
 ---
@@ -29,6 +33,8 @@
       <td><a href="README_JA.md"><kbd>🇯🇵 日本語</kbd></a></td>
     </tr>
   </table>
+  <br/>
+  <a href="https://bronsan.github.io/CyberLab/">🌐 Live Demo</a>
 </div>
 
 ---
@@ -52,7 +58,7 @@ Every challenge creates an **isolated Docker container** with a randomly assigne
 Covers mainstream web security vulnerabilities: **SQL Injection, XSS, RCE, SSRF, File Upload Bypass, JWT Security Issues**, and more. Built on real CVEs.
 
 ### 🤖 AI-Powered Assistance
-Stuck on a challenge? The built-in AI assistant (powered by OpenAI) provides **contextual hints** to guide your thinking without giving away the answer. Also supports **source code upload for AI security audit**.
+Stuck on a challenge? The built-in AI assistant (powered by OpenAI) provides **contextual hints** to guide your thinking without giving away the answer. Supports **source code upload for AI security audit**.
 
 ### 🏆 CTF Scoring System
 Capture flags, earn points, and climb the leaderboard. Supports **global, weekly, and monthly rankings** with Redis-powered real-time updates.
@@ -62,6 +68,28 @@ A background worker scans for expired containers every minute — **auto-destroy
 
 ### 🌐 i18n + Theme Switching
 Built-in **Chinese, English, and Japanese** language support with one-click switching. **Dark/Light/System** theme modes adapt to any environment.
+
+### 🛡️ Security Hardening
+
+| Measure | Description |
+|---------|-------------|
+| **Flag Hashing** | SHA-256 HMAC with per-challenge salt — no plaintext flags in DB |
+| **Rate Limiting** | Login 10/min, Register 5/min — prevents brute force |
+| **JWT Auth** | WebSocket + API both require Bearer Token |
+| **Docker Allowlist** | Only approved images can be pulled, preventing container escape |
+| **CORS Restriction** | Whitelist-only origins, no wildcard |
+| **Security Headers** | X-Frame-Options / XSS-Protection / Content-Type-Options |
+| **Zero Secrets in Code** | All passwords and keys injected via environment variables |
+
+---
+
+## Live Demo
+
+The frontend is deployed to GitHub Pages:
+
+**https://bronsan.github.io/CyberLab/**
+
+> Note: The frontend is a static site. Full interactivity (login, challenges, containers) requires the backend API running locally.
 
 ---
 
@@ -94,14 +122,14 @@ Built-in **Chinese, English, and Japanese** language support with one-click swit
 
 | Layer | Technology | Purpose |
 |-------|-----------|---------|
-| **Frontend** | Next.js 15 + React 19 + TypeScript + Tailwind CSS + shadcn/ui | SPA + SSR, responsive UI |
+| **Frontend** | Next.js 15 + React 19 + TypeScript + Tailwind CSS + shadcn/ui | SPA + SSR, i18n, theme switching |
 | **State** | Zustand | Lightweight global state |
 | **Animation** | Framer Motion | Page transitions, card animations |
 | **Backend** | Go + Gin + GORM + JWT + Zap | RESTful API, high performance |
 | **Database** | MySQL 8.0 (utf8mb4) + Redis 7 | Persistence + cache |
-| **Container** | Docker CLI | Dynamic lab orchestration |
+| **Container** | Docker CLI | Dynamic lab orchestration, allowlist |
 | **Realtime** | Gorilla WebSocket | Container status push, notifications |
-| **Deploy** | Docker Compose + Nginx | One-click deployment, reverse proxy |
+| **Security** | SHA-256 HMAC + rate limiter + CORS whitelist | Anti-leak, anti-brute-force, anti-escape |
 
 ---
 
@@ -115,11 +143,20 @@ Built-in **Chinese, English, and Japanese** language support with one-click swit
 - Docker (optional, for dynamic challenges)
 - Node.js 20+
 
+### Required Environment Variables
+
+```bash
+export JWT_SECRET=your-random-secret-key
+export DB_PASSWORD=your-database-password
+export FLAG_HASH_SALT=your-random-64-char-salt
+# AI (optional):
+export AI_API_KEY=sk-your-openai-api-key
+```
+
 ### Backend
 
 ```bash
 cd backend
-export GOPROXY=https://proxy.golang.org,direct
 go run ./cmd/server
 ```
 
@@ -146,86 +183,31 @@ docker-compose up -d
 
 ---
 
-## API Reference
+## Security Design
 
-Base path: `/api/v1`
-
-### Public Endpoints
-
-| Method | Path | Description |
-|--------|------|-------------|
-| `POST` | `/auth/register` | User registration |
-| `POST` | `/auth/login` | User login |
-| `GET` | `/challenges` | Challenge list (paginated) |
-| `GET` | `/challenges/:id` | Challenge detail |
-| `GET` | `/ranking/global` | Global leaderboard |
-| `GET` | `/ranking/week` | Weekly leaderboard |
-| `GET` | `/ranking/month` | Monthly leaderboard |
-| `GET` | `/announcement` | Announcements |
-
-### Authenticated Endpoints (Bearer Token)
-
-| Method | Path | Description |
-|--------|------|-------------|
-| `GET` | `/auth/profile` | User profile |
-| `PUT` | `/auth/profile` | Update profile |
-| `POST` | `/container/start` | Start challenge environment |
-| `GET` | `/container/status/:id` | Container status |
-| `POST` | `/container/stop` | Stop container |
-| `POST` | `/submit` | Submit flag |
-| `POST` | `/ai/hint` | AI hint |
-| `POST` | `/ai/audit` | AI code audit |
-
-### WebSocket
-
-```
-ws://host/ws?userId={id}
-```
-
-Events:
-- `container_created` — Container created
-- `container_destroyed` — Container destroyed
-- `container_error` — Container error
-- `ranking_update` — Leaderboard refresh
-- `announcement` — System announcement
+| Category | Measure |
+|----------|---------|
+| **Auth** | JWT stateless tokens, WebSocket requires JWT |
+| **Rate Limit** | Per-IP sliding window rate limiter |
+| **Password** | bcrypt hashed |
+| **Flag** | SHA-256 HMAC + per-challenge salt |
+| **Submissions** | Only flag hashes stored, never plaintext |
+| **Docker** | Image allowlist, distroless base image |
+| **Config** | Zero secrets committed, all via env vars |
+| **CORS** | Whitelist origins, no wildcard |
+| **TLS** | Terminated at Nginx reverse proxy |
 
 ---
 
-## Project Structure
+## GitHub Pages Deployment
+
+The frontend automatically deploys to GitHub Pages:
 
 ```
-CyberLab/
-├── backend/                    # Go backend service
-│   ├── cmd/server/main.go      # Entry point
-│   ├── internal/               # Business logic
-│   │   ├── config/             # Configuration
-│   │   ├── handlers/           # HTTP handlers
-│   │   ├── middleware/         # JWT auth
-│   │   ├── models/             # Data models (9 tables)
-│   │   ├── repository/         # Data access layer
-│   │   ├── services/           # Business services
-│   │   ├── scheduler/          # Container reclaimer
-│   │   └── router/             # Route registration
-│   └── pkg/                    # Packages
-│       ├── docker/             # Docker CLI wrapper
-│       ├── ws/                 # WebSocket hub
-│       └── utils/              # Utilities
-│
-├── frontend/                   # Next.js frontend
-│   └── src/
-│       ├── app/                # Pages & routes
-│       ├── components/         # UI components
-│       ├── locales/            # i18n (ZH/EN/JA)
-│       ├── providers/          # Theme & language providers
-│       ├── services/           # API client
-│       └── store/              # Zustand state
-│
-├── deploy/                     # Deployment config
-│   ├── docker-compose.yml
-│   └── nginx/nginx.conf
-│
-└── docs/                       # Documentation
+https://bronsan.github.io/CyberLab/
 ```
+
+On every push to `master`, GitHub Actions builds the static site and publishes it.
 
 ---
 
