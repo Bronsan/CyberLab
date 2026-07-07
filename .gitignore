@@ -40,6 +40,7 @@ deploy/nginx/ssl/*.pem
 # Internal design docs
 WorkProject/
 engineering documents/
+*.docx
 
 # Build
 dist/

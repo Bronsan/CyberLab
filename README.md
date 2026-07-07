@@ -83,14 +83,6 @@ CyberLab 是一个开源的在线网络安全靶场平台，为安全爱好者�
 
 ---
 
-## 在线演示
-
-项目前端已部署到 GitHub Pages：
-
-**https://bronsan.github.io/CyberLab/**
-
-> 说明：前端为静态站点，后端 API 需本地启动才能体验完整交互（登录、挑战、容器等）。
-
 ---
 
 ## 技术架构
@@ -294,7 +286,6 @@ CyberLab/
 | **TLS** | 生产环境需 Nginx 反代终结 SSL |
 
 ---
-
 
 ## License
 

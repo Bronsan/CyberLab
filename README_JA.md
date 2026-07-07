@@ -20,7 +20,6 @@
   <br/>
   <img src="https://img.shields.io/badge/status-active-success" alt="Status"/>
   <img src="https://img.shields.io/badge/security-audited-brightgreen" alt="Security"/>
-  <img src="https://img.shields.io/github/deployments/Bronsan/CyberLab/github-pages?label=pages" alt="Pages"/>
 </p>
 
 ---
@@ -33,8 +32,7 @@
       <td><kbd>🇯🇵 日本語</kbd></td>
     </tr>
   </table>
-  <br/>
-  <a href="https://bronsan.github.io/CyberLab/">🌐 ライブデモ</a>
+
 </div>
 
 ---
@@ -82,14 +80,6 @@ CyberLab は、セキュリティ愛好家やペネトレーションテスト�
 | **パスワード・鍵はコードなし** | すべて環境変数から注入 |
 
 ---
-
-## ライブデモ
-
-フロントエンドは GitHub Pages にデプロイされています：
-
-**https://bronsan.github.io/CyberLab/**
-
-> 注：フロントエンドは静的サイトです。完全な操作（ログイン、チャレンジ、コンテナ等）にはバックエンド API の起動が必要です。
 
 ---
 
@@ -199,16 +189,6 @@ docker-compose up -d
 ```
 
 ---
-
-## GitHub Pages デプロイ
-
-フロントエンドは GitHub Pages に自動デプロイされます：
-
-```
-https://bronsan.github.io/CyberLab/
-```
-
-`master` ブランチにプッシュするたびに、GitHub Actions が静的サイトをビルドして公開します。
 
 ---
 

@@ -20,7 +20,6 @@
   <br/>
   <img src="https://img.shields.io/badge/status-active-success" alt="Status"/>
   <img src="https://img.shields.io/badge/security-audited-brightgreen" alt="Security"/>
-  <img src="https://img.shields.io/github/deployments/Bronsan/CyberLab/github-pages?label=pages" alt="Pages"/>
 </p>
 
 ---
@@ -33,8 +32,7 @@
       <td><a href="README_JA.md"><kbd>🇯🇵 日本語</kbd></a></td>
     </tr>
   </table>
-  <br/>
-  <a href="https://bronsan.github.io/CyberLab/">🌐 Live Demo</a>
+
 </div>
 
 ---
@@ -82,14 +80,6 @@ Built-in **Chinese, English, and Japanese** language support with one-click swit
 | **Zero Secrets in Code** | All passwords and keys injected via environment variables |
 
 ---
-
-## Live Demo
-
-The frontend is deployed to GitHub Pages:
-
-**https://bronsan.github.io/CyberLab/**
-
-> Note: The frontend is a static site. Full interactivity (login, challenges, containers) requires the backend API running locally.
 
 ---
 
@@ -219,16 +209,6 @@ docker-compose up -d
 | **TLS** | Terminated at Nginx reverse proxy |
 
 ---
-
-## GitHub Pages Deployment
-
-The frontend automatically deploys to GitHub Pages:
-
-```
-https://bronsan.github.io/CyberLab/
-```
-
-On every push to `master`, GitHub Actions builds the static site and publishes it.
 
 ---
 
