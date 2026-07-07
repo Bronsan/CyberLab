@@ -94,24 +94,24 @@ export default function ChallengeDetailClient() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-[#0a0a0a]">
+      <div className="min-h-screen bg-background">
         <Navbar />
-        <div className="flex items-center justify-center pt-32 text-gray-500">Loading...</div>
+        <div className="flex items-center justify-center pt-32 text-muted-foreground">Loading...</div>
       </div>
     )
   }
 
   if (!challenge) {
     return (
-      <div className="min-h-screen bg-[#0a0a0a]">
+      <div className="min-h-screen bg-background">
         <Navbar />
-        <div className="flex items-center justify-center pt-32 text-gray-500">Challenge not found</div>
+        <div className="flex items-center justify-center pt-32 text-muted-foreground">Challenge not found</div>
       </div>
     )
   }
 
   return (
-    <div className="min-h-screen bg-[#0a0a0a]">
+    <div className="min-h-screen bg-background">
       <Navbar />
       <div className="mx-auto max-w-7xl px-4 pt-24 pb-20">
         <div className="grid lg:grid-cols-3 gap-8">
@@ -122,20 +122,20 @@ export default function ChallengeDetailClient() {
                 <span className={`text-xs font-medium px-2.5 py-1 rounded-full ${DIFFICULTY_COLORS[challenge.difficulty]}`}>
                   {challenge.difficulty}
                 </span>
-                <span className="text-sm text-[#00ff41] font-bold">{challenge.score} pts</span>
-                <span className="text-sm text-gray-500 bg-[#1a1a1a] px-2 py-1 rounded">{challenge.category}</span>
+                <span className="text-sm text-primary font-bold">{challenge.score} pts</span>
+                <span className="text-sm text-muted-foreground bg-muted px-2 py-1 rounded">{challenge.category}</span>
               </div>
 
-              <h1 className="text-2xl font-bold text-white mb-4">{challenge.title}</h1>
+              <h1 className="text-2xl font-bold text-foreground mb-4">{challenge.title}</h1>
 
-              <div className="prose prose-invert max-w-none text-gray-400 whitespace-pre-wrap">
+              <div className="prose prose-invert max-w-none text-muted-foreground whitespace-pre-wrap">
                 {challenge.description}
               </div>
 
               {challenge.tags && challenge.tags.length > 0 && (
                 <div className="flex gap-2 mt-6">
                   {challenge.tags.map((tag) => (
-                    <span key={tag.id} className="text-xs text-gray-500 bg-[#1a1a1a] px-2 py-1 rounded">
+                    <span key={tag.id} className="text-xs text-muted-foreground bg-muted px-2 py-1 rounded">
                       #{tag.tagName}
                     </span>
                   ))}
@@ -145,7 +145,7 @@ export default function ChallengeDetailClient() {
 
             {/* AI Hint Section */}
             <div className="glass rounded-xl p-6">
-              <h2 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
+              <h2 className="text-lg font-semibold text-foreground mb-4 flex items-center gap-2">
                 <Lightbulb className="h-5 w-5 text-yellow-500" />
                 AI Assistant
               </h2>
@@ -155,14 +155,14 @@ export default function ChallengeDetailClient() {
                   value={hintQuestion}
                   onChange={(e) => setHintQuestion(e.target.value)}
                   placeholder="Ask for a hint... (e.g., 'How do I start?')"
-                  className="w-full rounded-lg border border-[#262626] bg-[#111] px-4 py-2.5 text-sm text-white placeholder-gray-600 focus:border-[#00ff41] focus:outline-none"
+                  className="w-full rounded-lg border border-border bg-card px-4 py-2.5 text-sm text-foreground placeholder-muted-foreground/50 focus:border-primary focus:outline-none transition-colors"
                 />
                 <Button onClick={getHint} disabled={hintLoading} variant="outline" size="sm">
                   {hintLoading ? <Loader2 className="h-4 w-4 animate-spin mr-1" /> : null}
                   Get Hint
                 </Button>
                 {hint && (
-                  <div className="rounded-lg bg-[#1a1a1a] p-4 text-sm text-gray-300">
+                  <div className="rounded-lg bg-muted p-4 text-sm text-muted-foreground">
                     {hint}
                   </div>
                 )}
@@ -174,8 +174,8 @@ export default function ChallengeDetailClient() {
           <div className="space-y-6">
             {/* Container Controls */}
             <div className="glass rounded-xl p-6">
-              <h2 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
-                <Terminal className="h-5 w-5 text-[#00ff41]" />
+              <h2 className="text-lg font-semibold text-foreground mb-4 flex items-center gap-2">
+                <Terminal className="h-5 w-5 text-primary" />
                 Environment
               </h2>
 
@@ -183,7 +183,7 @@ export default function ChallengeDetailClient() {
                 <div className="space-y-3">
                   {!containerStatus ? (
                     <Button onClick={startContainer} disabled={containerLoading}
-                      className="w-full bg-[#00ff41] text-black hover:bg-[#00ff41]/90">
+                      className="w-full bg-primary text-primary-foreground hover:bg-primary/90">
                       {containerLoading ? (
                         <><Loader2 className="h-4 w-4 animate-spin mr-2" /> Starting...</>
                       ) : (
@@ -193,10 +193,10 @@ export default function ChallengeDetailClient() {
                   ) : (
                     <div className="space-y-3">
                       <div className="flex items-center gap-2 text-sm">
-                        <span className="h-2 w-2 rounded-full bg-green-500 animate-pulse" />
-                        <span className="text-green-500">Running</span>
-                        <Clock className="h-3 w-3 text-gray-500 ml-2" />
-                        <span className="text-gray-500">{containerStatus.runningTime}</span>
+                        <span className="h-2 w-2 rounded-full bg-primary animate-pulse" />
+                        <span className="text-primary">Running</span>
+                        <Clock className="h-3 w-3 text-muted-foreground ml-2" />
+                        <span className="text-muted-foreground">{containerStatus.runningTime}</span>
                       </div>
 
                       {containerStatus.hostPort > 0 && (
@@ -205,7 +205,7 @@ export default function ChallengeDetailClient() {
                           target="_blank"
                           rel="noopener noreferrer"
                         >
-                          <Button variant="outline" className="w-full border-[#00ff41]/30 text-[#00ff41]">
+                          <Button variant="outline" className="w-full border-primary/30 text-primary">
                             <ExternalLink className="h-4 w-4 mr-2" />
                             Open Environment
                           </Button>
@@ -221,15 +221,15 @@ export default function ChallengeDetailClient() {
                   )}
                 </div>
               ) : (
-                <p className="text-sm text-gray-500">
-                  <a href="/login" className="text-[#00ff41] hover:underline">Sign in</a> to start this challenge
+                <p className="text-sm text-muted-foreground">
+                  <a href="/login" className="text-primary hover:underline">Sign in</a> to start this challenge
                 </p>
               )}
             </div>
 
             {/* Flag Submission */}
             <div className="glass rounded-xl p-6">
-              <h2 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
+              <h2 className="text-lg font-semibold text-foreground mb-4 flex items-center gap-2">
                 <Flag className="h-5 w-5 text-red-500" />
                 Submit Flag
               </h2>
@@ -240,7 +240,7 @@ export default function ChallengeDetailClient() {
                   value={flag}
                   onChange={(e) => setFlag(e.target.value)}
                   placeholder="flag{...}"
-                  className="font-mono w-full rounded-lg border border-[#262626] bg-[#111] px-4 py-2.5 text-sm text-white placeholder-gray-600 focus:border-[#00ff41] focus:outline-none"
+                  className="font-mono w-full rounded-lg border border-border bg-card px-4 py-2.5 text-sm text-foreground placeholder-muted-foreground/50 focus:border-primary focus:outline-none transition-colors"
                 />
                 <Button onClick={submitFlag} disabled={flagLoading || !isAuthenticated}
                   className="w-full" variant="outline">
@@ -251,7 +251,7 @@ export default function ChallengeDetailClient() {
                 {flagResult && (
                   <div className={`rounded-lg p-3 text-sm text-center ${
                     flagResult.correct
-                      ? 'bg-green-500/10 text-green-500 border border-green-500/20'
+                      ? 'bg-green-500/10 text-primary border border-green-500/20'
                       : 'bg-red-500/10 text-red-500 border border-red-500/20'
                   }`}>
                     {flagResult.correct
@@ -264,23 +264,23 @@ export default function ChallengeDetailClient() {
 
             {/* Challenge Info */}
             <div className="glass rounded-xl p-6">
-              <h3 className="text-sm font-semibold text-gray-400 mb-3">Challenge Info</h3>
+              <h3 className="text-sm font-semibold text-muted-foreground mb-3">Challenge Info</h3>
               <div className="space-y-2 text-sm">
                 <div className="flex justify-between">
-                  <span className="text-gray-500">Category</span>
-                  <span className="text-gray-300">{challenge.category}</span>
+                  <span className="text-muted-foreground">Category</span>
+                  <span className="text-muted-foreground">{challenge.category}</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-gray-500">Difficulty</span>
-                  <span className="text-gray-300">{challenge.difficulty}</span>
+                  <span className="text-muted-foreground">Difficulty</span>
+                  <span className="text-muted-foreground">{challenge.difficulty}</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-gray-500">Points</span>
-                  <span className="text-[#00ff41]">{challenge.score}</span>
+                  <span className="text-muted-foreground">Points</span>
+                  <span className="text-primary">{challenge.score}</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-gray-500">Timeout</span>
-                  <span className="text-gray-300">{challenge.timeoutMinutes} min</span>
+                  <span className="text-muted-foreground">Timeout</span>
+                  <span className="text-muted-foreground">{challenge.timeoutMinutes} min</span>
                 </div>
               </div>
             </div>

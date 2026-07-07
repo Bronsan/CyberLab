@@ -35,32 +35,32 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#0a0a0a]">
+    <div className="min-h-screen bg-background">
       <Navbar />
       <div className="flex items-center justify-center px-4 pt-24 pb-20">
         <div className="w-full max-w-md">
           <div className="glass rounded-2xl p-8">
             <div className="flex items-center justify-center gap-2 mb-8">
-              <Terminal className="h-6 w-6 text-[#00ff41]" />
-              <span className="text-xl font-bold text-white">CyberLab</span>
+              <Terminal className="h-6 w-6 text-primary" />
+              <span className="text-xl font-bold text-foreground">CyberLab</span>
             </div>
 
-            <h1 className="text-2xl font-bold text-white text-center mb-2">
+            <h1 className="text-2xl font-bold text-foreground text-center mb-2">
               Welcome Back
             </h1>
-            <p className="text-gray-500 text-center text-sm mb-8">
+            <p className="text-muted-foreground text-center text-sm mb-8">
               Sign in to continue your journey
             </p>
 
             {error && (
-              <div className="mb-4 rounded-lg bg-red-500/10 border border-red-500/20 px-4 py-3 text-sm text-red-400">
+              <div className="mb-4 rounded-lg bg-destructive/10 border border-destructive/20 px-4 py-3 text-sm text-destructive">
                 {error}
               </div>
             )}
 
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
-                <label className="block text-sm font-medium text-gray-400 mb-1.5">
+                <label className="block text-sm font-medium text-muted-foreground mb-1.5">
                   Email
                 </label>
                 <input
@@ -69,12 +69,12 @@ export default function LoginPage() {
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="you@example.com"
                   required
-                  className="w-full rounded-lg border border-[#262626] bg-[#111] px-4 py-2.5 text-sm text-white placeholder-gray-600 focus:border-[#00ff41] focus:outline-none focus:ring-1 focus:ring-[#00ff41]"
+                  className="w-full rounded-lg border border-border bg-card px-4 py-2.5 text-sm text-foreground placeholder-muted-foreground/50 focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary transition-colors"
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-400 mb-1.5">
+                <label className="block text-sm font-medium text-muted-foreground mb-1.5">
                   Password
                 </label>
                 <div className="relative">
@@ -84,12 +84,12 @@ export default function LoginPage() {
                     onChange={(e) => setPassword(e.target.value)}
                     placeholder="••••••••"
                     required
-                    className="w-full rounded-lg border border-[#262626] bg-[#111] px-4 py-2.5 pr-10 text-sm text-white placeholder-gray-600 focus:border-[#00ff41] focus:outline-none focus:ring-1 focus:ring-[#00ff41]"
+                    className="w-full rounded-lg border border-border bg-card px-4 py-2.5 pr-10 text-sm text-foreground placeholder-muted-foreground/50 focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary transition-colors"
                   />
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500"
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
                   >
                     {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                   </button>
@@ -99,15 +99,15 @@ export default function LoginPage() {
               <Button
                 type="submit"
                 disabled={loading}
-                className="w-full bg-[#00ff41] text-black hover:bg-[#00ff41]/90"
+                className="w-full bg-primary text-primary-foreground hover:bg-primary/90"
               >
                 {loading ? "Signing in..." : "Sign In"}
               </Button>
             </form>
 
-            <p className="mt-6 text-center text-sm text-gray-500">
+            <p className="mt-6 text-center text-sm text-muted-foreground">
               Don&apos;t have an account?{" "}
-              <Link href="/register" className="text-[#00ff41] hover:underline">
+              <Link href="/register" className="text-primary hover:underline">
                 Register
               </Link>
             </p>
