@@ -20,7 +20,6 @@
   <br/>
   <img src="https://img.shields.io/badge/status-active-success" alt="Status"/>
   <img src="https://img.shields.io/badge/security-audited-brightgreen" alt="Security"/>
-  <img src="https://img.shields.io/github/deployments/Bronsan/CyberLab/github-pages?label=pages" alt="Pages"/>
 </p>
 
 ---
@@ -34,7 +33,6 @@
     </tr>
   </table>
   <br/>
-  <a href="https://bronsan.github.io/CyberLab/">🌐 在线预览</a>
 </div>
 
 ---
@@ -266,7 +264,7 @@ CyberLab/
 │       └── store/          # Zustand 状态管理
 │
 ├── deploy/                 # Docker Compose + Nginx
-└── .github/workflows/      # GitHub Pages 自动部署
+└── .github/workflows/      # CI 工作流
 ```
 
 ---
