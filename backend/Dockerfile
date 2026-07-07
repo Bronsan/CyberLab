@@ -22,7 +22,7 @@ COPY --from=builder /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
 # Copy example config (user must provide their own config.yaml)
 COPY config/config.example.yaml ./config/config.yaml
 
-EXPOSE 8080
+EXPOSE 17420
 
 USER nonroot:nonroot
 

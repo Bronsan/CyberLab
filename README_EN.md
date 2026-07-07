@@ -160,9 +160,9 @@ cd backend
 go run ./cmd/server
 ```
 
-- API: `http://localhost:8080`
-- Swagger: `http://localhost:8080/swagger/index.html`
-- WebSocket: `ws://localhost:8080/ws`
+- API: `http://localhost:17420`
+- Swagger: `http://localhost:17420/swagger/index.html`
+- WebSocket: `ws://localhost:17420/ws`
 
 ### Frontend
 

@@ -30,7 +30,7 @@ import (
 // @title CyberLab API
 // @version 1.0
 // @description CyberLab 网络安全靶场平台 API
-// @host localhost:8080
+// @host localhost:17420
 // @BasePath /api/v1
 // @securityDefinitions.apikey Bearer
 // @in header
@@ -166,7 +166,7 @@ func main() {
 	// Setup router
 	allowedOrigins := []string{
 		"http://localhost:3000",
-		"http://localhost:8080",
+		"http://localhost:17420",
 		"https://bronsan.github.io",
 	}
 	r := router.SetupRouter(

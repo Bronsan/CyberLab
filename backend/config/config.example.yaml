@@ -3,7 +3,7 @@
 # 敏感信息通过环境变量覆盖：JWT_SECRET, DB_PASSWORD, AI_API_KEY
 
 server:
-  port: 8080
+  port: 17420
   mode: release  # debug / release / test
   read_timeout: 30
   write_timeout: 30

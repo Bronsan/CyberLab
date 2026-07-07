@@ -1,7 +1,7 @@
 import axios from 'axios'
 import type { ApiResponse } from '@/types'
 
-const BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080'
+const BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:17420'
 
 const api = axios.create({
   baseURL: `${BASE_URL}/api/v1`,

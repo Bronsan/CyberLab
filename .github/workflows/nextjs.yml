@@ -45,7 +45,7 @@ jobs:
       - name: Build with Next.js
         run: npx next build
         env:
-          NEXT_PUBLIC_API_URL: ${{ vars.API_URL || 'http://localhost:8080' }}
+          NEXT_PUBLIC_API_URL: ${{ vars.API_URL || 'http://localhost:17420' }}
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3

@@ -161,9 +161,9 @@ cd backend
 go run ./cmd/server
 ```
 
-- API: `http://localhost:8080`
-- Swagger 文档: `http://localhost:8080/swagger/index.html`
-- WebSocket: `ws://localhost:8080/ws`
+- API: `http://localhost:17420`
+- Swagger 文档: `http://localhost:17420/swagger/index.html`
+- WebSocket: `ws://localhost:17420/ws`
 
 ### 启动前端
 

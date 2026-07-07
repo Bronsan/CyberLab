@@ -34,7 +34,7 @@ export default function AdminPage() {
     if (!isAuthenticated || user?.role !== "admin") return
 
     // Fetch via our service - for now use a simple GET
-    fetch(`${process.env.NEXT_PUBLIC_API_URL || "http://localhost:8080"}/api/v1/admin/dashboard`, {
+    fetch(`${process.env.NEXT_PUBLIC_API_URL || "http://localhost:17420"}/api/v1/admin/dashboard`, {
       headers: {
         Authorization: `Bearer ${localStorage.getItem("cyberlab-auth")
           ? JSON.parse(localStorage.getItem("cyberlab-auth") || "{}")?.state?.token
