@@ -3,6 +3,7 @@ package router
 import (
 	"github.com/cyberlab/backend/internal/handlers"
 	"github.com/cyberlab/backend/internal/middleware"
+	"github.com/cyberlab/backend/pkg/metrics"
 	"github.com/cyberlab/backend/pkg/utils"
 	"github.com/cyberlab/backend/pkg/ws"
 	"github.com/gin-gonic/gin"
@@ -72,6 +73,12 @@ func SetupRouter(
 	r.GET("/health", func(c *gin.Context) {
 		c.JSON(200, gin.H{"status": "ok"})
 	})
+
+	// Prometheus metrics
+	r.GET("/metrics", metrics.Handler())
+
+	// Global metrics middleware
+	r.Use(metrics.Middleware())
 
 	// Swagger — only available in debug/test mode
 	if serverMode == "debug" {

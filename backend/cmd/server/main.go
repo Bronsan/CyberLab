@@ -84,6 +84,11 @@ func main() {
 		&models.Announcement{},
 		&models.AIHint{},
 		&models.SystemLog{},
+		&models.Competition{},
+		&models.CompetitionChallenge{},
+		&models.CompetitionScore{},
+		&models.Team{},
+		&models.TeamMember{},
 	)
 
 	// Connect to Redis
