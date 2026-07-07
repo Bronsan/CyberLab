@@ -34,7 +34,7 @@ export function LanguageSwitcher() {
       </button>
 
       {open && (
-        <div className="absolute right-0 top-full mt-1 py-1 min-w-[140px] rounded-lg border border-border bg-card shadow-xl z-50">
+        <div className="absolute left-0 sm:right-0 top-full mt-1 py-1 min-w-[140px] rounded-lg border border-border bg-card shadow-xl z-50">
           {locales.map((loc) => (
             <button
               key={loc}
