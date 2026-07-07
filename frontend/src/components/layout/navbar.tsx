@@ -11,26 +11,26 @@ export function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false)
 
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50 border-b border-[#1a1a1a] bg-[#0a0a0a]/80 backdrop-blur-xl">
+    <nav className="fixed top-0 left-0 right-0 z-50 border-b border-border bg-background/80 backdrop-blur-xl">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="flex h-16 items-center justify-between">
           {/* Logo */}
           <Link href="/" className="flex items-center gap-2">
-            <Terminal className="h-6 w-6 text-[#00ff41]" />
-            <span className="text-lg font-bold text-white">CyberLab</span>
+            <Terminal className="h-6 w-6 text-primary" />
+            <span className="text-lg font-bold text-foreground">CyberLab</span>
           </Link>
 
           {/* Desktop nav */}
           <div className="hidden md:flex items-center gap-6">
             <Link
               href="/challenges"
-              className="text-sm text-gray-400 hover:text-white transition-colors"
+              className="text-sm text-muted-foreground hover:text-foreground transition-colors"
             >
               Challenges
             </Link>
             <Link
               href="/ranking"
-              className="text-sm text-gray-400 hover:text-white transition-colors"
+              className="text-sm text-muted-foreground hover:text-foreground transition-colors"
             >
               <div className="flex items-center gap-1">
                 <Trophy className="h-4 w-4" />
@@ -42,10 +42,10 @@ export function Navbar() {
               <div className="flex items-center gap-4">
                 <Link
                   href="/profile"
-                  className="flex items-center gap-2 text-sm text-gray-400 hover:text-white transition-colors"
+                  className="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
                 >
                   <User className="h-4 w-4" />
-                  <span className="text-[#00ff41]">{user?.score || 0} pts</span>
+                  <span className="text-primary">{user?.score || 0} pts</span>
                 </Link>
                 {user?.role === 'admin' && (
                   <Link href="/admin">
@@ -70,7 +70,7 @@ export function Navbar() {
 
           {/* Mobile menu button */}
           <button
-            className="md:hidden text-gray-400"
+            className="md:hidden text-muted-foreground"
             onClick={() => setMobileOpen(!mobileOpen)}
           >
             {mobileOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
@@ -80,11 +80,11 @@ export function Navbar() {
 
       {/* Mobile nav */}
       {mobileOpen && (
-        <div className="md:hidden border-t border-[#1a1a1a] bg-[#0a0a0a]">
+        <div className="md:hidden border-t border-border bg-background">
           <div className="space-y-1 px-4 py-4">
             <Link
               href="/challenges"
-              className="flex items-center gap-2 py-2 text-sm text-gray-400"
+              className="flex items-center gap-2 py-2 text-sm text-muted-foreground"
               onClick={() => setMobileOpen(false)}
             >
               <BookOpen className="h-4 w-4" />
@@ -92,7 +92,7 @@ export function Navbar() {
             </Link>
             <Link
               href="/ranking"
-              className="flex items-center gap-2 py-2 text-sm text-gray-400"
+              className="flex items-center gap-2 py-2 text-sm text-muted-foreground"
               onClick={() => setMobileOpen(false)}
             >
               <Trophy className="h-4 w-4" />
@@ -102,7 +102,7 @@ export function Navbar() {
               <>
                 <Link
                   href="/profile"
-                  className="flex items-center gap-2 py-2 text-sm text-gray-400"
+                  className="flex items-center gap-2 py-2 text-sm text-muted-foreground"
                   onClick={() => setMobileOpen(false)}
                 >
                   <User className="h-4 w-4" />
@@ -110,7 +110,7 @@ export function Navbar() {
                 </Link>
                 <button
                   onClick={() => { logout(); setMobileOpen(false) }}
-                  className="flex items-center gap-2 py-2 text-sm text-red-400"
+                  className="flex items-center gap-2 py-2 text-sm text-destructive"
                 >
                   <LogOut className="h-4 w-4" />
                   Logout
