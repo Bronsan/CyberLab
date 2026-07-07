@@ -1,0 +1,43 @@
+# Backend
+backend/server
+backend/logs/
+backend/vendor/
+backend/.env
+backend/config/config.yaml
+
+# Frontend
+frontend/node_modules/
+frontend/.next/
+frontend/out/
+frontend/build/
+frontend/.env.local
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# Docker
+deploy/nginx/ssl/*.pem
+
+# Internal design docs (not part of the project)
+WorkProject/
+engineering documents/
+
+# Build
+dist/
+build/
+*.exe
+*.test
