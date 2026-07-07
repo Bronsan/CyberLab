@@ -368,7 +368,7 @@ export default function HomePage() {
             {/* Title */}
             <ScrollReveal>
               <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold tracking-tight leading-tight mb-6">
-                {t.hero.title}{' '}
+                <span>{t.hero.title} </span>
                 <span className="gradient-text">{t.hero.titleAccent}</span>
               </h1>
             </ScrollReveal>
