@@ -112,7 +112,7 @@ func (h *SubmissionHandler) SubmitFlag(c *gin.Context) {
 	submission := &models.Submission{
 		UserID:        userID.(uint),
 		ChallengeID:   req.ChallengeID,
-		SubmittedFlag: submittedFlagHash, // store hash only
+		SubmittedFlag: submittedFlagHash,
 		IsCorrect:     isCorrect,
 		SubmittedAt:   time.Now(),
 	}
@@ -126,18 +126,18 @@ func (h *SubmissionHandler) SubmitFlag(c *gin.Context) {
 		return
 	}
 
-	// Record solved challenge
+	// Correct answer: record solve + update score + log in one flow
+	// (future: wrap in GORM transaction for atomicity)
+	uid := userID.(uint)
+	score := challenge.Score
+
 	h.submissionRepo.CreateUserChallenge(&models.UserChallenge{
-		UserID:      userID.(uint),
+		UserID:      uid,
 		ChallengeID: req.ChallengeID,
-		Score:       challenge.Score,
+		Score:       score,
 		SolvedAt:    time.Now(),
 	})
-
-	// Update user score
-	h.rankingService.UpdateUserScore(userID.(uint), challenge.Score)
-
-	// Log
+	h.rankingService.UpdateUserScore(uid, score)
 	h.logRepo.Create(&models.SystemLog{
 		UserID: userID.(uint),
 		Action: models.ActionSubmitFlag,
