@@ -130,6 +130,7 @@ func main() {
 		instanceRepo, challengeRepo, userRepo, logRepo,
 		dockerMgr, wsHub, utils.Log,
 		cfg.Docker.PortRangeStart, cfg.Docker.PortRangeEnd,
+		cfg.Docker.AllowedImages,
 	)
 	rankingService := services.NewRankingService(userRepo, redisClient)
 	aiService := services.NewAIService(
@@ -147,15 +148,22 @@ func main() {
 	authHandler := handlers.NewAuthHandler(authService)
 	challengeHandler := handlers.NewChallengeHandler(challengeService)
 	containerHandler := handlers.NewContainerHandler(containerService)
-	submissionHandler := handlers.NewSubmissionHandler(submissionRepo, challengeRepo, rankingService, logRepo)
+	submissionHandler := handlers.NewSubmissionHandler(submissionRepo, challengeRepo, rankingService, logRepo, instanceRepo, cfg.Security.FlagHashSalt)
 	rankingHandler := handlers.NewRankingHandler(rankingService)
 	announcementHandler := handlers.NewAnnouncementHandler(announcementRepo)
 	aiHandler := handlers.NewAIHandler(aiService)
 	adminHandler := handlers.NewAdminHandler(userRepo, containerService, challengeService, announcementRepo, logRepo)
 
 	// Setup router
+	allowedOrigins := []string{
+		"http://localhost:3000",
+		"http://localhost:8080",
+		"https://bronsan.github.io",
+	}
 	r := router.SetupRouter(
 		cfg.JWT.Secret,
+		cfg.Server.Mode,
+		allowedOrigins,
 		authHandler, challengeHandler, containerHandler,
 		submissionHandler, rankingHandler, announcementHandler,
 		aiHandler, adminHandler, wsHub,

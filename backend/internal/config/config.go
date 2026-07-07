@@ -1,6 +1,7 @@
 package config
 
 import (
+	"errors"
 	"os"
 
 	"gopkg.in/yaml.v3"
@@ -14,6 +15,11 @@ type Config struct {
 	Docker   DockerConfig   `yaml:"docker"`
 	Log      LogConfig      `yaml:"log"`
 	AI       AIConfig       `yaml:"ai"`
+	Security SecurityConfig `yaml:"security"`
+}
+
+type SecurityConfig struct {
+	FlagHashSalt string `yaml:"flag_hash_salt"`
 }
 
 type ServerConfig struct {
@@ -49,14 +55,15 @@ type JWTConfig struct {
 }
 
 type DockerConfig struct {
-	Host                string `yaml:"host"`
-	APIVersion          string `yaml:"api_version"`
-	PortRangeStart      int    `yaml:"port_range_start"`
-	PortRangeEnd        int    `yaml:"port_range_end"`
-	DefaultTimeoutMin   int    `yaml:"default_timeout_minutes"`
-	CPULimit            float64 `yaml:"cpu_limit"`
-	MemoryLimitMB       int64   `yaml:"memory_limit_mb"`
-	NetworkName         string `yaml:"network_name"`
+	Host                string   `yaml:"host"`
+	APIVersion          string   `yaml:"api_version"`
+	PortRangeStart      int      `yaml:"port_range_start"`
+	PortRangeEnd        int      `yaml:"port_range_end"`
+	DefaultTimeoutMin   int      `yaml:"default_timeout_minutes"`
+	CPULimit            float64  `yaml:"cpu_limit"`
+	MemoryLimitMB       int64    `yaml:"memory_limit_mb"`
+	NetworkName         string   `yaml:"network_name"`
+	AllowedImages       []string `yaml:"allowed_images"`
 }
 
 type LogConfig struct {
@@ -86,7 +93,7 @@ func Load(path string) (*Config, error) {
 		return nil, err
 	}
 
-	// Override with env vars if present
+	// Override secrets from environment variables (highest priority)
 	if v := os.Getenv("JWT_SECRET"); v != "" {
 		cfg.JWT.Secret = v
 	}
@@ -95,6 +102,22 @@ func Load(path string) (*Config, error) {
 	}
 	if v := os.Getenv("AI_API_KEY"); v != "" {
 		cfg.AI.APIKey = v
+	}
+	if v := os.Getenv("FLAG_HASH_SALT"); v != "" {
+		cfg.Security.FlagHashSalt = v
+	}
+
+	// Validate required secrets
+	if cfg.JWT.Secret == "" {
+		return nil, errors.New("JWT_SECRET is required (set in config.yaml or env var)")
+	}
+	if cfg.Database.Password == "" {
+		return nil, errors.New("DB_PASSWORD is required (set in config.yaml or env var)")
+	}
+
+	// Default allowed images
+	if len(cfg.Docker.AllowedImages) == 0 {
+		cfg.Docker.AllowedImages = []string{"cyberlab/*"}
 	}
 
 	return &cfg, nil

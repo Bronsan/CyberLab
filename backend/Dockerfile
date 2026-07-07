@@ -1,7 +1,7 @@
 # Build stage
 FROM golang:1.23-alpine AS builder
 
-RUN apk add --no-cache git
+RUN apk add --no-cache git ca-certificates
 
 WORKDIR /app
 
@@ -11,19 +11,19 @@ RUN go mod download
 COPY . .
 RUN CGO_ENABLED=0 GOOS=linux go build -o /app/server ./cmd/server
 
-# Runtime stage
-FROM alpine:3.19
-
-RUN apk add --no-cache ca-certificates tzdata docker-cli
+# Runtime stage — distroless for minimum attack surface
+FROM gcr.io/distroless/static:nonroot
 
 WORKDIR /app
 
 COPY --from=builder /app/server .
-COPY config/config.yaml ./config/config.yaml
+COPY --from=builder /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
 
-# Create logs directory
-RUN mkdir -p /app/logs
+# Copy example config (user must provide their own config.yaml)
+COPY config/config.example.yaml ./config/config.yaml
 
 EXPOSE 8080
 
-CMD ["./server"]
+USER nonroot:nonroot
+
+ENTRYPOINT ["./server"]

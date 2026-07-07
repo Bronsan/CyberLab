@@ -1,0 +1,61 @@
+# CyberLab 后端配置示例
+# 复制为 config.yaml 并填入实际值
+# 敏感信息通过环境变量覆盖：JWT_SECRET, DB_PASSWORD, AI_API_KEY
+
+server:
+  port: 8080
+  mode: release  # debug / release / test
+  read_timeout: 30
+  write_timeout: 30
+
+database:
+  driver: mysql
+  host: 127.0.0.1
+  port: 3306
+  user: root
+  password: ""  # 通过环境变量 DB_PASSWORD 设置
+  dbname: cyberlab
+  charset: utf8mb4
+  max_idle_conns: 10
+  max_open_conns: 100
+
+redis:
+  host: 127.0.0.1
+  port: 6379
+  password: ""
+  db: 0
+  pool_size: 10
+
+jwt:
+  secret: ""  # 通过环境变量 JWT_SECRET 设置
+  expire_hours: 24
+
+docker:
+  host: unix:///var/run/docker.sock
+  api_version: 1.41
+  port_range_start: 30000
+  port_range_end: 40000
+  default_timeout_minutes: 30
+  cpu_limit: 0.5
+  memory_limit_mb: 512
+  network_name: cyberlab-net
+  allowed_images:
+    - "cyberlab/*"
+    - "library/*"
+
+log:
+  level: info
+  filename: logs/cyberlab.log
+  max_size: 100
+  max_backups: 7
+  max_age: 30
+
+security:
+  flag_hash_salt: ""  # 通过环境变量 FLAG_HASH_SALT 设置，用于 Flag 哈希加盐
+
+ai:
+  provider: openai
+  api_key: ""  # 通过环境变量 AI_API_KEY 设置
+  model: gpt-4o-mini
+  max_tokens: 1024
+  temperature: 0.7

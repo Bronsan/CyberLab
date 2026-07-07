@@ -11,12 +11,13 @@ import (
 	"github.com/cyberlab/backend/internal/models"
 	"github.com/cyberlab/backend/internal/repository"
 	"github.com/cyberlab/backend/pkg/docker"
+	"github.com/cyberlab/backend/pkg/utils"
 	ws "github.com/cyberlab/backend/pkg/ws"
 	"go.uber.org/zap"
 )
 
 type ContainerService struct {
-	instanceRepo *repository.InstanceRepository
+	instanceRepo  *repository.InstanceRepository
 	challengeRepo *repository.ChallengeRepository
 	userRepo      *repository.UserRepository
 	logRepo       *repository.LogRepository
@@ -27,6 +28,7 @@ type ContainerService struct {
 	portMu        sync.Mutex
 	portStart     int
 	portEnd       int
+	allowedImages []string
 }
 
 func NewContainerService(
@@ -38,6 +40,7 @@ func NewContainerService(
 	hub *ws.Hub,
 	logger *zap.Logger,
 	portStart, portEnd int,
+	allowedImages []string,
 ) *ContainerService {
 	// Initialize port pool
 	pool := make(map[int]bool)
@@ -56,6 +59,7 @@ func NewContainerService(
 		portPool:      pool,
 		portStart:     portStart,
 		portEnd:       portEnd,
+		allowedImages: allowedImages,
 	}
 }
 
@@ -83,6 +87,11 @@ func (s *ContainerService) StartContainer(userID uint, challengeID uint) (*Start
 
 	if challenge.DockerImage == "" {
 		return nil, errors.New("challenge has no docker image configured")
+	}
+
+	// Validate image against allowed list
+	if err := s.validateAllowedImage(challenge.DockerImage); err != nil {
+		return nil, err
 	}
 
 	// Allocate port
@@ -313,4 +322,61 @@ func (s *ContainerService) releasePort(port int) {
 	s.portMu.Lock()
 	defer s.portMu.Unlock()
 	s.portPool[port] = true
+}
+
+// validateAllowedImage checks that the image matches the allowed list.
+// Supports glob patterns like "cyberlab/*" or exact matches like "library/nginx:latest".
+func (s *ContainerService) validateAllowedImage(image string) error {
+	if len(s.allowedImages) == 0 {
+		return nil // no restrictions
+	}
+
+	for _, pattern := range s.allowedImages {
+		matched, err := matchGlob(pattern, image)
+		if err == nil && matched {
+			return nil
+		}
+	}
+
+	utils.Log.Warn("Blocked attempt to use unauthorized Docker image",
+		zap.String("image", image),
+		zap.Strings("allowed", s.allowedImages),
+	)
+	return fmt.Errorf("docker image %s is not in the allowed list", image)
+}
+
+// Simple glob match (supports "*" prefix/suffix matching)
+func matchGlob(pattern, str string) (bool, error) {
+	// Exact match
+	if pattern == str {
+		return true, nil
+	}
+
+	// Wildcard: "prefix/*" matches "prefix/anything"
+	parts := patternSplit(pattern)
+	strParts := patternSplit(str)
+
+	if len(parts) == 2 && parts[0] == strParts[0] && parts[1] == "*" {
+		return true, nil
+	}
+	if len(parts) == 2 && parts[1] == "*" && parts[0] == strParts[0] {
+		return true, nil
+	}
+
+	return false, nil
+}
+
+func patternSplit(s string) []string {
+	var parts []string
+	current := ""
+	for i := 0; i < len(s); i++ {
+		if s[i] == '/' {
+			parts = append(parts, current)
+			current = ""
+		} else {
+			current += string(s[i])
+		}
+	}
+	parts = append(parts, current)
+	return parts
 }

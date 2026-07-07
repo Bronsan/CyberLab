@@ -14,8 +14,10 @@ import (
 type SubmissionHandler struct {
 	submissionRepo *repository.SubmissionRepository
 	challengeRepo  *repository.ChallengeRepository
+	instanceRepo   *repository.InstanceRepository
 	rankingService *services.RankingService
 	logRepo        *repository.LogRepository
+	flagHashSalt   string
 }
 
 func NewSubmissionHandler(
@@ -23,16 +25,24 @@ func NewSubmissionHandler(
 	challengeRepo *repository.ChallengeRepository,
 	rankingService *services.RankingService,
 	logRepo *repository.LogRepository,
+	instanceRepo *repository.InstanceRepository,
+	flagHashSalt string,
 ) *SubmissionHandler {
+	if flagHashSalt == "" {
+		flagHashSalt = "cyberlab-default-salt-change-in-production"
+		utils.Log.Warn("FLAG_HASH_SALT not set, using default — set FLAG_HASH_SALT env var in production")
+	}
 	return &SubmissionHandler{
 		submissionRepo: submissionRepo,
 		challengeRepo:  challengeRepo,
+		instanceRepo:   instanceRepo,
 		rankingService: rankingService,
 		logRepo:        logRepo,
+		flagHashSalt:   flagHashSalt,
 	}
 }
 
-// SubmitFlag handles flag submission
+// SubmitFlag handles flag submission with security validation.
 // @Summary Submit a flag
 // @Tags Submission
 // @Security Bearer
@@ -53,6 +63,12 @@ func (h *SubmissionHandler) SubmitFlag(c *gin.Context) {
 		return
 	}
 
+	// Basic input sanitization
+	if len(req.Flag) > 1024 {
+		utils.BadRequest(c, "flag too long")
+		return
+	}
+
 	// Get challenge
 	challenge, err := h.challengeRepo.FindByID(req.ChallengeID)
 	if err != nil {
@@ -60,21 +76,43 @@ func (h *SubmissionHandler) SubmitFlag(c *gin.Context) {
 		return
 	}
 
-	// Check if already solved
-	_, err = h.submissionRepo.FindByUserAndChallenge(userID.(uint), req.ChallengeID)
-	if err == nil {
-		utils.Error(c, 200, "already solved")
+	if !challenge.IsActive {
+		utils.Error(c, 40004, "challenge is not active")
 		return
 	}
 
-	// Verify flag
-	isCorrect := req.Flag == challenge.Flag
+	// Verify the user has an active or previously assigned instance for this challenge
+	// This prevents blind flag brute-forcing across challenges the user hasn't started
+	instance, _ := h.instanceRepo.FindByUserAndChallenge(userID.(uint), req.ChallengeID)
+	if instance == nil {
+		// Check if user has ever submitted for this challenge (relaxed check)
+		existing, _ := h.submissionRepo.FindByUserAndChallenge(userID.(uint), req.ChallengeID)
+		if existing == nil {
+			utils.Error(c, 40006, "you must start the challenge before submitting a flag")
+			return
+		}
+	}
 
-	// Record submission
+	// Check if already solved
+	_, err = h.submissionRepo.FindByUserAndChallenge(userID.(uint), req.ChallengeID)
+	if err == nil {
+		utils.Success(c, gin.H{
+			"correct": true,
+			"score":   challenge.Score,
+			"message": "already solved",
+		})
+		return
+	}
+
+	// Verify flag using hash comparison (not plaintext)
+	isCorrect := utils.VerifyFlag(req.Flag, challenge.Flag, req.ChallengeID, h.flagHashSalt)
+
+	// Record submission — store HASH of submitted flag, not plaintext
+	submittedFlagHash := utils.HashString(req.Flag)
 	submission := &models.Submission{
 		UserID:        userID.(uint),
 		ChallengeID:   req.ChallengeID,
-		SubmittedFlag: req.Flag,
+		SubmittedFlag: submittedFlagHash, // store hash only
 		IsCorrect:     isCorrect,
 		SubmittedAt:   time.Now(),
 	}
@@ -112,14 +150,6 @@ func (h *SubmissionHandler) SubmitFlag(c *gin.Context) {
 }
 
 // GetSubmissionHistory returns the user's submission history
-// @Summary Get submission history
-// @Tags Submission
-// @Security Bearer
-// @Produce json
-// @Param page query int false "Page number"
-// @Param pageSize query int false "Page size"
-// @Success 200 {object} utils.Response
-// @Router /api/v1/submit/history [get]
 func (h *SubmissionHandler) GetSubmissionHistory(c *gin.Context) {
 	userID, _ := c.Get("userId")
 	page, _ := strconv.Atoi(c.DefaultQuery("page", "1"))
